@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+        body{
+            background-image: url("weatherimage.jpg");
+        }
+        
+        .row{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width:50%;
+            height: 50vh;
+            margin-left: 250px;
+            font-size: 30px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color:rgb(18, 16, 16);
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 2px solid black;
+             
+        }
+        .main{
+            display: none;
+            display: flex;
+            width: 40%;
+            height: 65vh;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            flex-direction: column;
+            margin-left: 300px;
+            background: linear-gradient(to right, #2980b9, #6dd5fa, #ffffff); 
+
+            ;
+            outline: none;
+           border: none;
+           padding-top: 20px;
+          
+            
+            
+           
+           
+            
+            
+            
+        
+        }
+        img{
+            width: 100%;
+            height: 50%;
+            background-color: rgb(182, 180, 178);
+            
+        }
+        .weacther-temp{
+            font-size: 3rem;
+            color: rgb(247, 247, 247);
+            box-shadow: 4px rgb(78, 66, 66) solid ;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        .weather-city{
+            font-size: 30px;
+            color: rgb(255, 255, 255);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            
+        }
+       
+        .cloud
+        {
+            font-size: 30px;
+            color: rgb(255, 255, 255);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+           
+        } 
+        #search-form{
+            font-size:1.4rem;
+            width: 50%;
+        }
+        #click{
+            font-size:1.4rem; 
+            width: 50%;
+        }
+        #data{
+            font-size:20px;
+            color: white;
+            
+        }
+
+    </style>
+</head>
+<body>
+   <h1 class = "text-center text-danger pt-3" >Weather App </h1>
+
+   <div class="container">
+   
+    <div class="form-group">
+        
+        <input type="search" id ="search-form"class="form-control-lg mt-3" style="width: 100%;"placeholder="Search by city name"><span id ="data"></span><br>
+        <button class="btn btn-success btn-lg mt-2" id="click" style="width: 100%; " onclick="submit()">Search</button>
+    
+    </div>
+
+    <div class = "main">
+        <div class="water-image" id="img">
+             <!-- <img src="weather.webp" alt="">  -->
+
+        </div>
+        <div class="weather-city"id ="city"></div>
+        <div class ="weacther-temp" id="temp"></div>
+        <div class="cloud" id ="cloud-weather"></div>
+    </div>
+
+</div>
+
+   <script>
+    
+    const API_KEY = `477348c45f0034c7cdb914325f6fabe8`
+    
+  
+    const searchInputBox = document.getElementById('search-form');
+   function submit(){
+    //console.log(searchInputBox.value);
+    getWeatherReport(searchInputBox.value);
+    event.preventDefault();
+   // document.querySelector('.main').style.display="block";
+
+   }
+  
+     const getWeatherReport = async (city)=>{
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
+        const response = await fetch(url);
+        const data = await response.json()
+        //console.log(data);
+        return showWeatherReport(data)
+     }
+
+    
+
+     
+
+   
+    
+   function showWeatherReport(data){
+    const res = document.getElementById('data');
+    
+    if(data.cod=="404"){
+        res.innerHTML=`<h2> City Not Found </h2>`; 
+        
+
+    }
+    else{
+
+        console.log(data);
+        const city = document.getElementById('city');
+        city.innerText=`${data.name},${data.sys.country}`;
+        const temerature = document.getElementById('temp');
+        temerature.innerText=`${data.main.temp}°C`;
+        const cloud = document.getElementById('cloud-weather');
+        cloud.innerHTML=`${data.weather[0].main}`;
+        const weather = document.getElementById('img');
+        res.innerHTML="";
+        
+        
+        weather.innerHTML=`
+        <div>
+            <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="">
+        </div>
+       
+        `
+    }
+
+    }
+    
+
+ 
+
+
+    
+   
+   </script>
+</body>
+</html>
